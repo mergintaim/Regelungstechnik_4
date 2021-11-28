@@ -1,18 +1,18 @@
 close all
-Verstaerkungsfaktoren=[1,3,8,35/4,10];
 
 hold on
-for i = 5:5
-    K_r=Verstaerkungsfaktoren(i);
-    simOut = sim('L4A2_e_simu.mdl',0.2);
-    plot(get(simOut.ScopeData,1).Values.Time,get(simOut.ScopeData,1).Values.Data);
-    xlabel 'Zeit [s]'
-    title 'Regelgröße'
-end
+K_r=10;
+simOut = sim('L4A2_e_simu.mdl',0.3);
+plot(get(simOut.ScopeData,1).Values.Time,get(simOut.ScopeData,1).Values.Data);
+plot(get(simOut.ScopeData,3).Values.Time,get(simOut.ScopeData,3).Values.Data);
+xlabel 'Zeit [s]'
+legend ('Regelgröße','Stellgröße')
 grid on
 hold off
 
-x=findpeaks(get(simOut.ScopeData,1).Values.Data)
-t1=get(simOut.ScopeData,1).Values.Data(find(get(simOut.ScopeData,1).Values.Data==x(end-2)));
-t2=get(simOut.ScopeData,1).Values.Data(find(get(simOut.ScopeData,1).Values.Data==x(end)));
-
+% brechnung Kreisfrequenz
+simOut = sim('L4A2_e_simu.mdl',0.3);
+x=findpeaks(get(simOut.ScopeData,1).Values.Data(3000:end));
+t1=get(simOut.ScopeData,1).Values.Time(find(get(simOut.ScopeData,1).Values.Data==x(end-1)));
+t2=get(simOut.ScopeData,1).Values.Time(find(get(simOut.ScopeData,1).Values.Data==x(end)));
+kreisfeqenz = 2*pi/(t2-t1)
